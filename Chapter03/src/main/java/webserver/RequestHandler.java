@@ -14,6 +14,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import db.DataBase;
 import model.User;
 import util.HttpRequestUtils;
 import util.IOUtils;
@@ -61,21 +62,54 @@ public class RequestHandler extends Thread {
         		Map<String, String> params = HttpRequestUtils.parseQueryString(body);
         		User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
         		log.debug("User : {}",user);
+        		DataBase.addUser(user);
         		DataOutputStream dos = new DataOutputStream(out);
         		response302Header(dos, "/index.html");
         		
+        	} else if ("/user/login".equals(url)) {
+        		String body = IOUtils.readData(br, contentLength);
+        		Map<String, String> params
+        			= HttpRequestUtils.parseQueryString(body);
+        		User user = DataBase.findUserById(params.get("userId"));
+        		if (user == null) {
+        			responseResource(out, "/user/login_failed.html");
+        			return;
+        		}
+        		
+	        	if (user.getPassword().equals(params.get("password"))) {
+	        		DataOutputStream dos = new DataOutputStream(out);
+	        		response302LoginSuccessHeader(dos);        		
+	        	} else {
+	        		responseResource(out, "/user/login_failed.html");
+	        	}
+        	
         	} else {
-        		DataOutputStream dos = new DataOutputStream(out);
-        		byte[] body = Files.readAllBytes(new File("./webapp" + url).toPath());
-        		response200Header(dos, body.length);
-        		responseBody(dos, body);        		
+        		responseResource(out, url);
         	}
         } catch (IOException e) {
             log.error(e.getMessage());
         }
     }
     
-    private void response302Header (DataOutputStream dos, String url) {
+    private void responseResource(OutputStream out, String url) throws IOException {
+    	DataOutputStream dos = new DataOutputStream(out);
+    	byte[] body = Files.readAllBytes(new File("./webapp" + url).toPath());
+    	response200Header(dos, body.length);
+    	responseBody(dos, body);
+    }
+    
+    private void response302LoginSuccessHeader(DataOutputStream dos) {
+    	try {
+    		dos.writeBytes("HTTP/1.1 302 Redirect \r\n");
+    		dos.writeBytes("Set-Cookie: logined=true \r\n");
+    		dos.writeBytes("Location: /index.html \r\n");
+    		dos.writeBytes("\r\n");
+    	} catch (IOException e) {
+    		log.error(e.getMessage());
+    	}
+    }
+    
+    private void response302Header(DataOutputStream dos, String url) {
     	try {
     		dos.writeBytes("HTTP/1.1 302 Redirect \r\n");
     		dos.writeBytes("Location: " + url + " \r\n");
