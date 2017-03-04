@@ -12,15 +12,14 @@
 2.4 테스트와 리팩토링을 통한 문자열 계산기 구현   
 2.5 추가 학습 자료   
 
->[**3장 개발 환경 구축 및 웹 서버 실습 요구사항**]
-(https://github.com/minseokism/NextStep/tree/master/Chapter03)   
+>[**3장 개발 환경 구축 및 웹 서버 실습 요구사항**](https://github.com/minseokism/NextStep/tree/master/Chapter03)   
 3.1 서비스 요구사항   
 3.2 로컬 개발 환경 구축   
 3.3 원격 서버에 배포   
 3.4 웹 서버 실습   
 3.5 추가 학습 자료   
 
->**4장 HTTP 웹 서버 구현을 통해 HTTP 이해하기**   
+>[**4장 HTTP 웹 서버 구현을 통해 HTTP 이해하기**](https://github.com/minseokism/NextStep/tree/master/Chapter04)   
 4.1 동영상을 활용한 HTTP 웹 서버 실습   
 4.2 HTTP 웹 서버 구현   
 4.3 추가 학습 자료   
