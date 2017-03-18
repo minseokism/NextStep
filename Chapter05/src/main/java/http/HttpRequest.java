@@ -1,4 +1,4 @@
-package webserver;
+package http;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,22 +16,23 @@ import util.IOUtils;
 public class HttpRequest {
     private static final Logger log = LoggerFactory.getLogger(HttpRequest.class);
 	
-	private String method;
-	private String path;
 	private Map<String, String> headers = new HashMap<>();
 	private Map<String, String> params = new HashMap<>();
+	private RequestLine requestLine;
 	
 	public HttpRequest(InputStream in) {	
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 			String line = br.readLine();
+			log.debug("request line : {}", line);
 			if (line == null) {
         		return;
         	}
-			
-			processRequestLine(line);
+
+			requestLine = new RequestLine(line);
         	
 			line = br.readLine();
+			
           	while (!line.equals("")) {
         		log.debug("header : {}", line);
         		String[] tokens = line.split(":");
@@ -39,42 +40,24 @@ public class HttpRequest {
         		line = br.readLine();
         	}
           	
-          	if ("POST".equals(method)) {
-          		String body = IOUtils.readData(br,
-          				Integer.parseInt(headers.get("Content-Length")));
+          	if (requestLine.isPost()) {
+          		String body = IOUtils.readData(br, Integer.parseInt(headers.get("Content-Length")));
           		params = HttpRequestUtils.parseQueryString(body);
+          	} else {
+          		params = requestLine.getParams();
           	}
+          	
 		} catch (IOException e) {
 			log.error(e.getMessage());
 		}
 	}
 	
-	private void processRequestLine(String requestLine) {
-		log.debug("request line : {}", requestLine);
-		String[] tokens = requestLine.split(" ");
-		method = tokens[0];
-		
-		if ("POST".equals(method)) {
-			path = tokens[1];
-			return;
-		}
-		
-		int index = tokens[1].indexOf("?");
-		if (index == -1) {
-			path = tokens[1];
-		} else {
-			path = tokens[1].substring(0, index);
-			params = HttpRequestUtils.parseQueryString(
-					tokens[1].substring(index+1));
-		}
-	}
-	
-	public String getMethod() {
-		return method;
+	public HttpMethod getMethod() {
+		return requestLine.getMethod();
 	}
 	
 	public String getPath() {
-		return path;
+		return requestLine.getPath();
 	}
 	
 	public String getHeader(String name) {
@@ -83,5 +66,6 @@ public class HttpRequest {
 	
 	public String getParameter(String name) {
 		return params.get(name);
-	} 
+	}
+	
 }

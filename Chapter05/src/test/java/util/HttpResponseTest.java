@@ -7,7 +7,7 @@ import java.io.OutputStream;
 
 import org.junit.Test;
 
-import webserver.HttpResponse;
+import http.HttpResponse;
 
 public class HttpResponseTest {
 	private String testDirectory = "./src/test/resources/";

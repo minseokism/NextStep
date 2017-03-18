@@ -1,4 +1,4 @@
-package webserver;
+package http;
 
 import java.io.DataOutputStream;
 import java.io.File;
