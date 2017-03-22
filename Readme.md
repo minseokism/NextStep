@@ -2,7 +2,7 @@
 ===============
 [자바 웹 프로그래밍 Next Step](http://book.naver.com/bookdb/book_detail.nhn?bid=11037465)을 Chapter 순으로 예제 풀이
 
-###목차
+목차
 ----
 
 >[**2장 문자열 계산기 구현을 통한 테스트와 리팩토링**](https://github.com/minseokism/NextStep/tree/master/Chapter02)   
@@ -30,7 +30,7 @@
 5.3 서블릿 컨테이너, 서블릿/JSP를 활용한 문제 해결   
 5.4 추가 학습 자료   
 
->**6장 서블릿/JSP를 활용해 동적인 웹 애플리케이션 개발하기**   
+>[**6장 서블릿/JSP를 활용해 동적인 웹 애플리케이션 개발하기**](https://github.com/minseokism/NextStep/tree/master/Chapter06)  
 6.1 서블릿/JSP로 회원관리 기능 다시 개발하기     
 6.2 세션(HttpSession) 요구사항 및 실습     
 6.3 세션(HttpSession) 구현     
