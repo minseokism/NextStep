@@ -35,6 +35,13 @@ public class User {
         this.email = updateUser.email;
     }
     
+    public boolean matchPassword(String password) {
+    	if (password == null) {
+    		return false;
+    	}
+        return this.password.equals(password);
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
