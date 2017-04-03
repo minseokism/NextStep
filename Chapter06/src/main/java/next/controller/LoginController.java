@@ -19,8 +19,7 @@ public class LoginController extends HttpServlet{
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		RequestDispatcher rd = req.getRequestDispatcher("/user/login.jsp");
-		rd.forward(req, resp);
+		forward("/user/login.jsp", req, resp);
 	}
 	
 	@Override
@@ -31,19 +30,23 @@ public class LoginController extends HttpServlet{
 	
 		if (user == null) {
 			req.setAttribute("loginFailed", true);
-			RequestDispatcher rd = req.getRequestDispatcher("/user/login.jsp");
-			rd.forward(req, resp);
+			forward("/user/login.jsp", req, resp);
 			return;
 		}
 		
 		if (user.matchPassword(password)) {
 			HttpSession session = req.getSession();
-			session.setAttribute("user", user);
+			session.setAttribute(UserSessionUtils.USER_SESSION_KEY, user);
 			resp.sendRedirect("/");
 		} else {
 			req.setAttribute("loginFailed", true);
-			RequestDispatcher rd = req.getRequestDispatcher("/user/login.jsp");
-			rd.forward(req, resp);
+			forward("/user/login.jsp", req, resp);
 		}
 	}
+	
+	private void forward(String forwardUrl, HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		RequestDispatcher rd = req.getRequestDispatcher(forwardUrl);
+        rd.forward(req, resp);
+    }
 }

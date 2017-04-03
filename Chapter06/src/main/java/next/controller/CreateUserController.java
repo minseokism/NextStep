@@ -31,7 +31,9 @@ public class CreateUserController extends HttpServlet {
         User user = new User(req.getParameter("userId"), req.getParameter("password"), req.getParameter("name"),
                 req.getParameter("email"));
         log.debug("user : {}", user);
+        
         DataBase.addUser(user);
+        
         resp.sendRedirect("/users/list");
     }
 }
