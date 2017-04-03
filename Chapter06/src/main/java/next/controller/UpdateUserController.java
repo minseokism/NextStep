@@ -1,7 +1,8 @@
-package next.web;
+package next.controller;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,11 +16,27 @@ import org.slf4j.LoggerFactory;
 import core.db.DataBase;
 import next.model.User;
 
-@WebServlet("/user/update")
-public class UpdateUserServlet extends HttpServlet {
+@WebServlet(value = { "/users/update", "/users/updateForm" })
+public class UpdateUserController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    private static final Logger log = LoggerFactory.getLogger(UpdateUserServlet.class);
-
+    private static final Logger log = LoggerFactory.getLogger(UpdateUserController.class);
+    
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String userId = req.getParameter("userId");
+		User user = DataBase.findUserById(userId);
+		HttpSession session = req.getSession();
+    	User value = (User)session.getAttribute("user");
+    	
+    	if (!user.getUserId().equals(value.getUserId())) {
+    		 throw new IllegalStateException("다른 사용자의 정보를 수정할 수 없습니다.");
+    	}
+    	 	
+		req.setAttribute("user", user);
+		RequestDispatcher rd = req.getRequestDispatcher("/user/updateForm.jsp");
+		rd.forward(req, resp);
+	}
+    
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String userId = req.getParameter("userId");
@@ -35,6 +52,6 @@ public class UpdateUserServlet extends HttpServlet {
                 req.getParameter("email"));
         log.debug("Update user : {}", updateUser);
         user.update(updateUser);
-        resp.sendRedirect("/user/list");
+        resp.sendRedirect("/");
 	}
 }

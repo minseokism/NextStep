@@ -1,4 +1,4 @@
-package next.web;
+package next.controller;
 
 import java.io.IOException;
 
@@ -13,8 +13,8 @@ import javax.servlet.http.HttpSession;
 import core.db.DataBase;
 import next.model.User;
 
-@WebServlet("/user/login")
-public class LoginServlet extends HttpServlet{
+@WebServlet(value = { "/users/login", "/users/loginForm" })
+public class LoginController extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
 	@Override
