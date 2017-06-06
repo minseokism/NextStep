@@ -7,15 +7,15 @@ import java.sql.SQLException;
 import core.jdbc.ConnectionManager;
 import next.model.User;
 
-public abstract class InsertJdbcTemplate {
-    public void insert(User user) throws SQLException {
+public abstract class jdbcTemplate {
+    public void update(User user) throws SQLException {
         Connection con = null;
         PreparedStatement pstmt = null;
         try {
             con = ConnectionManager.getConnection();
-            String sql = createQueryForInsert();
+            String sql = createQuery();
             pstmt = con.prepareStatement(sql);
-            setValuesForInsert(user, pstmt);
+            setValues(user, pstmt);
 
             pstmt.executeUpdate();
         } finally {
@@ -29,8 +29,8 @@ public abstract class InsertJdbcTemplate {
         }
     }
 
-    abstract String createQueryForInsert();
+    abstract String createQuery();
 
-	abstract void setValuesForInsert(User user, PreparedStatement pstmt) throws SQLException;
+	abstract void setValues(User user, PreparedStatement pstmt) throws SQLException;
     
 }
