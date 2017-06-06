@@ -39,7 +39,7 @@ public class RequestHandler extends Thread {
         	if (line == null) {
         		return;
         	}
-        	        	
+        	      
         	log.debug("request line : {}", line);
         	String[] tokens = line.split(" ");
         	
