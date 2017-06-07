@@ -49,7 +49,6 @@ public class UserDao {
     }
 
 
-    @SuppressWarnings("unchecked")
 	public List<User> findAll() throws SQLException {
     	JdbcTemplate jdbcTemplate = new JdbcTemplate();
     	
@@ -61,10 +60,10 @@ public class UserDao {
 			}
 		};
 
-		RowMapper rowMapper = new RowMapper() {
+		RowMapper<User> rowMapper = new RowMapper<User>() {
 			
 			@Override
-			public Object mapRow(ResultSet rs) throws SQLException {
+			public User mapRow(ResultSet rs) throws SQLException {
 				return new User(rs.getString("userId"), 
 						rs.getString("password"), 
 						rs.getString("name"),
@@ -87,10 +86,10 @@ public class UserDao {
 			}
 		};
 		
-		RowMapper rowMapper = new RowMapper() {
+		RowMapper<User> rowMapper = new RowMapper<User>() {
 			
 			@Override
-			public Object mapRow(ResultSet rs) throws SQLException {
+			public User mapRow(ResultSet rs) throws SQLException {
 				return new User(rs.getString("userId"), 
 						rs.getString("password"), 
 						rs.getString("name"),

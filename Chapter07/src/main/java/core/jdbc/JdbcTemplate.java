@@ -19,8 +19,7 @@ public class JdbcTemplate {
         }
     }
     
-	@SuppressWarnings("rawtypes")
-	public List query(String sql, PreparedStatementSetter pss, RowMapper rowMapper) throws DataAccessException  {
+	public <T> List<T> query(String sql, PreparedStatementSetter pss, RowMapper<T> rowMapper) throws DataAccessException  {
 		ResultSet rs = null;
 
 		try (Connection con = ConnectionManager.getConnection();
@@ -30,7 +29,7 @@ public class JdbcTemplate {
 
 			rs = pstmt.executeQuery();
 			
-			List<Object> result = new ArrayList<Object>();
+			List<T> result = new ArrayList<T>();
 
 			while (rs.next()) {
 				result.add(rowMapper.mapRow(rs));
@@ -42,9 +41,8 @@ public class JdbcTemplate {
 		} 
 	}
 	
-	@SuppressWarnings("rawtypes")
-	public Object queryForObject(String sql, PreparedStatementSetter pss, RowMapper rowMapper) throws SQLException {
-		List result = query(sql, pss, rowMapper);
+	public <T> T queryForObject(String sql, PreparedStatementSetter pss, RowMapper<T> rowMapper) throws SQLException {
+		List<T> result = query(sql, pss, rowMapper);
 		if (result.isEmpty()) {
 			return null;
 		} 
